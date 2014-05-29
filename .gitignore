@@ -8,4 +8,4 @@ pids
 *.seed
 
 node_modules
-
+bower_components

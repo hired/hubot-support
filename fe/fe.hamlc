@@ -1,0 +1,29 @@
+!!! 5
+%html
+  %head
+    %title= @page.title
+    %script{type: "text/javascript", src: "/js/all.js"}
+    %link{rel: "stylesheet", type: "text/css", href: "/css/all.css"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"}
+    %meta{"http-equiv": "content-type", content: "text/html; charset=utf-8"}
+  %body
+    .navigationbar.navigationbar--fixed-top.navigationbar--default
+      .container
+        .navigationbar__header
+          %a.navigationbar__header__logo{href: '#'} Support
+
+    #main
+      .hide.container.xs-mt2#chat
+        .messages.xs-prlh0.sm-prl0
+        %form.message-form{role: 'form'}
+          %input.input.input--text{type: 'text', placeholder: 'Type your message and press return to send.'}
+
+      .hide.container.xs-mt2#name
+        %form{role: 'form'}
+          .xs-2
+          %input.input.input--text{type: 'text', name: 'name', placeholder: 'Please enter your name and press return.'}
+          .xs-text-center.xs-pt2
+            %a{href: 'http://fortitude.io', target: '_blank'}
+              %img{src: 'https://raw.githubusercontent.com/fortitude/fortitude-sass/0.1.2/fortitude.png'}
+
+    %script{src: '/js/primus-client.js', type: 'text/javascript'}

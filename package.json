@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/hired/hubot-support/issues"
   },
-  "homepage": "https://github.com/hired/hubot-support"
+  "homepage": "https://github.com/hired/hubot-support",
+  "dependencies": {
+    "primus": "^2.2.4",
+    "lodash": "^2.4.1",
+    "express": "^4.3.2",
+    "browserchannel": "^1.2.0"
+  }
 }
