@@ -1,6 +1,6 @@
 {
   "name": "hubot-support",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Relay conversations between the web and your favorite chat room.",
   "main": "index.coffee",
   "scripts": {
