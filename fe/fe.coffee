@@ -1,4 +1,1 @@
-$ = require 'jquery'
-ChatSupport = require '../src/client/chat_support'
-
-$ -> ChatSupport.start()
+require('hubot-support/client').start()

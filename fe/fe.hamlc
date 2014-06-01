@@ -25,5 +25,3 @@
           .xs-text-center.xs-pt2
             %a{href: 'http://fortitude.io', target: '_blank'}
               %img{src: 'https://raw.githubusercontent.com/fortitude/fortitude-sass/0.1.2/fortitude.png'}
-
-    %script{src: '/js/primus-client.js', type: 'text/javascript'}
