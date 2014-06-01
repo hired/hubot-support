@@ -1,11 +1,19 @@
 Primus = require 'primus'
-Client = require './src/client'
+Client = require './src/server/client'
 express = require 'express'
 {inspect} = require 'util'
+path = require 'path'
 _ = require 'lodash'
 
+if dir = process.env.HUBOT_SUPPORT_FRONTEND_DIR
+  FE_DIR = path.resolve dir
+else
+  FE_DIR = "#{__dirname}/public"
+
+
 module.exports = (robot) ->
-  robot.router.use express.static "#{__dirname}/public"
+  console.log "Loading frontend from #{FE_DIR}"
+  robot.router.use express.static FE_DIR
 
   _.each ['/', '/chat-support', '/chat-support/collect-name'], (route) ->
     robot.router.get route, (req, res) ->
