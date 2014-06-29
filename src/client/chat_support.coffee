@@ -43,6 +43,9 @@ chatData = (data) ->
   if data.type == 'identify'
     window.localStorage.clientId = clientId = data.clientId
     window.localStorage.userName = userName = data.name
+  else if data.type == 'kill'
+    messages.push new SystemMessage body: "Session terminated."
+    primus.end()
   else if data.type == 'message'
     if data.from == clientId
       messages.push new UserMessage body: data.body

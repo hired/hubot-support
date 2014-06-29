@@ -7,6 +7,7 @@ class Client
   @drop: (client) -> @clients = _.without @clients, client
   @findByName: (name) -> _.find @clients, (c) -> c.name == name
   @findById: (id) -> _.find @clients, (c) -> c.id == id
+  @findByNameOrId: (nameOrId) -> @findByName(nameOrId) || @findById(nameOrId)
   @uniqueId: ->
     buf = crypto.randomBytes 5
     id = buf.toString 'base64'
@@ -44,9 +45,8 @@ class Client
     else
       client.receive message
 
-  @respond: (nameOrId, message) ->
-    client = @findByName(nameOrId) || @findById(nameOrId)
-    client.respond message
+  @respond: (nameOrId, message) -> @findByNameOrId(nameOrId).respond message
+  @kill: (nameOrId) -> @findByNameOrId(nameOrId).kill()
 
   id: 'not set'
   constructor: ({@spark}) -> Client.add @
@@ -72,6 +72,8 @@ class Client
       type: 'identify'
       name: @name
       clientId: @id
+
+  kill: -> @spark.write type: 'kill'
 
   end: (message) ->
     @closed()

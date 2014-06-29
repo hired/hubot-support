@@ -10,7 +10,6 @@ if dir = process.env.HUBOT_SUPPORT_FRONTEND_DIR
 else
   FE_DIR = "#{__dirname}/public"
 
-
 module.exports = (robot) ->
   console.log "Loading frontend from #{FE_DIR}"
   robot.router.use express.static FE_DIR
@@ -33,6 +32,11 @@ module.exports = (robot) ->
       Currently connected clients:
       #{(_.map Client.clients, (c) -> inspect [c.name, c.id]).join "\n"}
     """
+
+  robot.respond /end support ([^ ]+)/, (msg) ->
+    client = msg.match[1]
+
+    Client.kill client
 
   primus = new Primus robot.server,
     transformer: 'browserchannel'
