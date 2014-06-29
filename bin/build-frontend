@@ -1,2 +1,2 @@
-fec
+fec --compress
 rm -rf tmp
