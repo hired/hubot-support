@@ -19,7 +19,7 @@ messages = chatView = primus = clientId = userName = null
 
 startChatView = ->
   messages       = new Backbone.Collection [
-    new SystemMessage(body: "Welcome to #{process.env.HUBOT_SUPPORT_TEAM_NAME} Chat Support."),
+    new SystemMessage(body: "Welcome to Chat Support."),
     new SystemMessage(body: "You are known as #{userName}.")
   ]
 
