@@ -1,0 +1,1 @@
+fec export -s ./src/client/chat_support.coffee -o client.js
