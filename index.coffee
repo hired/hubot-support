@@ -10,6 +10,7 @@ if dir = process.env.HUBOT_SUPPORT_FRONTEND_DIR
 else
   FE_DIR = "#{__dirname}/public"
 
+supportIsActive = true
 module.exports = (robot) ->
   console.log "Loading frontend from #{FE_DIR}"
   robot.router.use express.static FE_DIR
@@ -29,13 +30,15 @@ module.exports = (robot) ->
 
   robot.respond /support$/, (msg) ->
     Client.writeToChat """
+      Support is #{if supportIsActive then "enabled" else "disabled"}
       Currently connected clients:
       #{(_.map Client.clients, (c) -> inspect [c.name, c.id]).join "\n"}
     """
 
+  robot.respond /enable support/, (msg) -> supportIsActive = true
+  robot.respond /disable support/, (msg) -> supportIsActive = false
   robot.respond /end support ([^ ]+)/, (msg) ->
     client = msg.match[1]
-
     Client.kill client
 
   primus = new Primus robot.server,
@@ -46,6 +49,8 @@ module.exports = (robot) ->
   primus.on 'connection', (spark) ->
     client = new Client spark: spark
 
+    notifyInactiveAndKill client unless supportIsActive
+
     spark.on 'end', -> client.closed()
     spark.on 'data', (message) -> Client.receive client, message
     spark.on 'error', (err) -> Client.writeToChat """
@@ -55,3 +60,14 @@ module.exports = (robot) ->
       ```
     """
 
+notifyInactiveAndKill = (client) ->
+  lines = [
+    "Chat support is currently closed.",
+    "Please email your talent advocate or client executive."
+    "I am a robot, but I still hope you have a nice day."
+  ]
+
+  _.each lines, (line) ->
+    client.respond from: 'bot', body: line
+
+  client.kill()
