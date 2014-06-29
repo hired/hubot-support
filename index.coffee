@@ -35,8 +35,14 @@ module.exports = (robot) ->
       #{(_.map Client.clients, (c) -> inspect [c.name, c.id]).join "\n"}
     """
 
-  robot.respond /enable support/, (msg) -> supportIsActive = true
-  robot.respond /disable support/, (msg) -> supportIsActive = false
+  robot.respond /enable support/, (msg) ->
+    supportIsActive = true
+    Client.writeToChat "Support enabled"
+
+  robot.respond /disable support/, (msg) ->
+    supportIsActive = false
+    Client.writeToChat "Support disabled"
+
   robot.respond /end support ([^ ]+)/, (msg) ->
     client = msg.match[1]
     Client.kill client
@@ -63,7 +69,7 @@ module.exports = (robot) ->
 notifyInactiveAndKill = (client) ->
   lines = [
     "Chat support is currently closed.",
-    "Please email your talent advocate or client executive."
+    "Please email #{process.env.HUBOT_SUPPORT_EMAIL || 'somebody'}."
     "I am a robot, but I still hope you have a nice day."
   ]
 

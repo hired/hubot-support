@@ -18,9 +18,8 @@ Primus.require = (module) ->
 messages = chatView = primus = clientId = userName = null
 
 startChatView = ->
-  welcomeMessage = new SystemMessage body: 'Welcome to Hired Chat Support'
   messages       = new Backbone.Collection [
-    new SystemMessage(body: 'Welcome to Hired Chat Support.'),
+    new SystemMessage(body: "Welcome to #{process.env.HUBOT_SUPPORT_TEAM_NAME} Chat Support."),
     new SystemMessage(body: "You are known as #{userName}.")
   ]
 
