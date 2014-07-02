@@ -10,7 +10,7 @@ if dir = process.env.HUBOT_SUPPORT_FRONTEND_DIR
 else
   FE_DIR = "#{__dirname}/public"
 
-supportIsActive = true
+supportIsActive = !process.env.HUBOT_SUPPORT_DISABLE
 module.exports = (robot) ->
   console.log "Loading frontend from #{FE_DIR}"
   robot.router.use express.static FE_DIR
