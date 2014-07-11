@@ -10,10 +10,10 @@ if dir = process.env.HUBOT_SUPPORT_FRONTEND_DIR
 else
   FE_DIR = "#{__dirname}/public"
 
-supportIsActive = !process.env.HUBOT_SUPPORT_DISABLE
 module.exports = (robot) ->
   console.log "Loading frontend from #{FE_DIR}"
   robot.router.use express.static FE_DIR
+  robot.brain.data.supportIsActive ||= true
 
   _.each ['/', '/chat-support', '/chat-support/collect-name'], (route) ->
     robot.router.get route, (req, res) ->
@@ -30,17 +30,17 @@ module.exports = (robot) ->
 
   robot.respond /support$/, (msg) ->
     Client.writeToChat """
-      Support is #{if supportIsActive then "enabled" else "disabled"}
+      Support is #{if robot.brain.data.supportIsActive then "enabled" else "disabled"}
       Currently connected clients:
       #{(_.map Client.clients, (c) -> inspect [c.name, c.id]).join "\n"}
     """
 
   robot.respond /enable support/, (msg) ->
-    supportIsActive = true
+    robot.brain.data.supportIsActive = true
     Client.writeToChat "Support enabled"
 
   robot.respond /disable support/, (msg) ->
-    supportIsActive = false
+    robot.brain.data.supportIsActive = false
     Client.writeToChat "Support disabled"
 
   robot.respond /end support ([^ ]+)/, (msg) ->
@@ -55,7 +55,7 @@ module.exports = (robot) ->
   primus.on 'connection', (spark) ->
     client = new Client spark: spark
 
-    notifyInactiveAndKill client unless supportIsActive
+    notifyInactiveAndKill client unless robot.brain.data.supportIsActive
 
     spark.on 'end', -> client.closed()
     spark.on 'data', (message) -> Client.receive client, message
