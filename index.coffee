@@ -13,6 +13,11 @@ else
 module.exports = (robot) ->
   console.log "Loading frontend from #{FE_DIR}"
   robot.router.use express.static FE_DIR
+
+  supportIsActive = -> robot.brain.data.supportIsActive
+  enableSupport   = -> robot.brain.data.supportIsActive = true
+  disableSupport  = -> robot.brain.data.supportIsActive = false
+
   robot.brain.data.supportIsActive ||= true
 
   _.each ['/', '/chat-support', '/chat-support/collect-name'], (route) ->
@@ -30,17 +35,17 @@ module.exports = (robot) ->
 
   robot.respond /support$/, (msg) ->
     Client.writeToChat """
-      Support is #{if robot.brain.data.supportIsActive then "enabled" else "disabled"}
+      Support is #{if supportIsActive() then "enabled" else "disabled"}
       Currently connected clients:
       #{(_.map Client.clients, (c) -> inspect [c.name, c.id]).join "\n"}
     """
 
   robot.respond /enable support/, (msg) ->
-    robot.brain.data.supportIsActive = true
+    enableSupport()
     Client.writeToChat "Support enabled"
 
   robot.respond /disable support/, (msg) ->
-    robot.brain.data.supportIsActive = false
+    disableSupport()
     Client.writeToChat "Support disabled"
 
   robot.respond /end support ([^ ]+)/, (msg) ->
@@ -55,7 +60,7 @@ module.exports = (robot) ->
   primus.on 'connection', (spark) ->
     client = new Client spark: spark
 
-    notifyInactiveAndKill client unless robot.brain.data.supportIsActive
+    notifyInactiveAndKill client unless supportIsActive()
 
     spark.on 'end', -> client.closed()
     spark.on 'data', (message) -> Client.receive client, message

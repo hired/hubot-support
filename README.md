@@ -22,7 +22,6 @@ This module relays conversations between the web and wherever your Hubot lives.
 
 * `HUBOT_SUPPORT_FRONTEND_DIR` - location of support frontend
 * `HUBOT_SUPPORT_EMAIL` - your support team's email, in case you are not home
-* `HUBOT_SUPPORT_DISABLED` - start in 'disabled' mode
 
 #### Customize the UI
 
